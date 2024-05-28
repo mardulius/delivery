@@ -3,6 +3,7 @@ using Primitives;
 
 namespace DeliveryApp.Core.Domain.SharedKernel
 {
+
     public class Weight : ValueObject
     {
         public int Value { get; }
