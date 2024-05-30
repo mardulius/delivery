@@ -2,6 +2,7 @@ using DeliveryApp.Core.Ports;
 using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
 using DeliveryApp.Infrastructure.Adapters.Postgres;
 using Primitives;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DeliveryApp.Api
 {
@@ -41,6 +42,8 @@ namespace DeliveryApp.Api
             var connectionString = Configuration["CONNECTION_STRING"];
             var geoServiceGrpcHost = Configuration["GEO_SERVICE_GRPC_HOST"];
             var messageBrokerHost = Configuration["MESSAGE_BROKER_HOST"];
+
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
 
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
