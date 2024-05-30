@@ -2,7 +2,8 @@
 
 namespace Primitives
 {
-    public interface IDomainEvent : INotification
+    public abstract record DomainEvent : INotification
     {
+        public Guid EventId { get; set; } = Guid.NewGuid();
     }
 }
