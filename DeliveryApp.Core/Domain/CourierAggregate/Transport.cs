@@ -23,6 +23,10 @@ namespace DeliveryApp.Core.Domain.CourierAggregate
         public int Speed { get; }
         public Weight Capacity { get; }
 
+        private Transport()
+        {
+            
+        }
         private Transport(int id, string name, int speed, Weight capacity)
         {
             Id = id;

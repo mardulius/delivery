@@ -25,12 +25,16 @@ namespace DeliveryApp.Core.Domain.OrderAggregate
 
 
 
-        public Guid CourierId { get; private set; }
+        public Guid? CourierId { get; private set; }
         public Location Location { get; private set; }
         public Weight Weight { get; private set; }  
         public OrderStatus Status { get; private set; }
 
-        private Order(Guid backetId, Location location, Weight weight) 
+        public Order()
+        {
+            
+        }
+        private Order(Guid backetId, Location location, Weight weight) : this()
         { 
             Id = backetId;
             Location = location;

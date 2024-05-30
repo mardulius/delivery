@@ -1,3 +1,8 @@
+using DeliveryApp.Core.Ports;
+using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
+using DeliveryApp.Infrastructure.Adapters.Postgres;
+using Primitives;
+
 namespace DeliveryApp.Api
 {
     public class Startup
@@ -36,6 +41,12 @@ namespace DeliveryApp.Api
             var connectionString = Configuration["CONNECTION_STRING"];
             var geoServiceGrpcHost = Configuration["GEO_SERVICE_GRPC_HOST"];
             var messageBrokerHost = Configuration["MESSAGE_BROKER_HOST"];
+
+            services.AddTransient<IOrderRepository, OrderRepository>();
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+            services.AddTransient<ICourierRepository, CourierRepository>();
+
+
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

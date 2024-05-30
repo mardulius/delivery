@@ -38,7 +38,11 @@ namespace DeliveryApp.Core.Domain.CourierAggregate
         public Location Location { get; private set; }
         public CourierStatus Status { get; private set; }
 
-        private Courier(string name, Transport transport)
+        private Courier()
+        {
+
+        }
+        private Courier(string name, Transport transport) : this()
         {
             Id = Guid.NewGuid();
             Name = name;

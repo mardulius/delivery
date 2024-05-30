@@ -13,6 +13,10 @@ namespace DeliveryApp.Core.Domain.CourierAggregate
 
         public string Name { get; }
 
+        private CourierStatus()
+        {
+            
+        }
         private CourierStatus(int id, string name)
         {
             Id = id;
