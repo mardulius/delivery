@@ -1,4 +1,5 @@
-﻿using DeliveryApp.Core.Domain.OrderAggregate;
+﻿using DeliveryApp.Core.Domain.CourierAggregate;
+using DeliveryApp.Core.Domain.OrderAggregate;
 using DeliveryApp.Core.Domain.SharedKernel;
 using DeliveryApp.Infrastructure.Adapters.Postgres;
 using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
@@ -47,9 +48,9 @@ namespace DeliveryApp.IntegrationTests.Repositories
             _dbContext = new AppDbContext(contextOptions);
 
             _dbContext.Database.EnsureCreated();
-            
+
             _orderRepository = new(_dbContext);
-           _unitOfWork = new(_dbContext);
+            _unitOfWork = new(_dbContext);
 
 
 
@@ -64,7 +65,7 @@ namespace DeliveryApp.IntegrationTests.Repositories
         {
             //arrange
             var order = Order.Create(Guid.NewGuid(), _location, _weight).Value;
-            
+
             //act
             _orderRepository.Add(order);
             await _unitOfWork.SaveEntitiesAsync();
@@ -74,5 +75,26 @@ namespace DeliveryApp.IntegrationTests.Repositories
             order.Should().BeEquivalentTo(orderFromDb);
         }
 
+
+        [Fact]
+        public async Task CanUpdateOrder()
+        {
+            //arrange
+            var order = Order.Create(Guid.NewGuid(), _location, _weight).Value;
+            var courier = Courier.Create("Sergey", Transport.Scooter).Value;
+            
+            _orderRepository.Add(order);
+            await _unitOfWork.SaveEntitiesAsync();
+
+            //act
+            order.Assign(courier);
+            _orderRepository.Update(order);
+            await _unitOfWork.SaveEntitiesAsync();
+
+            //assert
+            var orderFromDb = await _orderRepository.GetAsync(order.Id);
+            orderFromDb.Should().BeEquivalentTo(order);
+
+        }
     }
 }
