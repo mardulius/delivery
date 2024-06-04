@@ -4,7 +4,7 @@ using Npgsql;
 
 namespace DeliveryApp.Core.Application.UseCases.Queries.GetCouriers
 {
-    public class GetCouriersHandler : IRequestHandler<GetCouriersQuery, Response>
+    public class GetCouriersHandler : IRequestHandler<GetCouriersQuery, GetCouriersResponse>
     {
         private readonly string _connectionString;
 
@@ -13,7 +13,7 @@ namespace DeliveryApp.Core.Application.UseCases.Queries.GetCouriers
             _connectionString = connectionString;
         }
 
-        public async Task<Response> Handle(GetCouriersQuery request, CancellationToken cancellationToken)
+        public async Task<GetCouriersResponse> Handle(GetCouriersQuery request, CancellationToken cancellationToken)
         {
 
             using var postgres = new NpgsqlConnection(_connectionString);
@@ -32,7 +32,7 @@ namespace DeliveryApp.Core.Application.UseCases.Queries.GetCouriers
                 couriers.Add(MapToCourier(item));
             }
 
-            return new Response(couriers);
+            return new GetCouriersResponse(couriers);
 
         }
 

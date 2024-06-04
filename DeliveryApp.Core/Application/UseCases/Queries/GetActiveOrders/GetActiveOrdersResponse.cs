@@ -1,11 +1,11 @@
 ﻿
 namespace DeliveryApp.Core.Application.UseCases.Queries.GetActiveOrders
 {
-    public class Response
+    public class GetActiveOrdersResponse
     {
         public List<Order> Orders { get; set; } = new List<Order>();
 
-        public Response(List<Order> orders)
+        public GetActiveOrdersResponse(List<Order> orders)
         {
             Orders.AddRange(orders);
         }

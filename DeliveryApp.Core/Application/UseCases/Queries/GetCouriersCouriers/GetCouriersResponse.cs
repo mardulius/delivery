@@ -1,10 +1,10 @@
 ﻿
 namespace DeliveryApp.Core.Application.UseCases.Queries.GetCouriers
 {
-    public class Response
+    public class GetCouriersResponse
     {
         public List<Courier> Couriers { get; set; } = new List<Courier>(); 
-        public Response(List<Courier> couriers)
+        public GetCouriersResponse(List<Courier> couriers)
         {
             Couriers.AddRange(couriers);
         }
