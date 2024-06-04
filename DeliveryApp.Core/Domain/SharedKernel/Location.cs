@@ -8,6 +8,9 @@ namespace DeliveryApp.Core.Domain.SharedKernel
         public int X { get; }
         public int Y { get; }
 
+        public static readonly Location MinLocation = new(1, 1);
+        public static readonly Location MaxLocation = new(10, 10);
+
         private Location()
         {
         }
@@ -18,14 +21,22 @@ namespace DeliveryApp.Core.Domain.SharedKernel
             Y = y;
         }
 
-        public static Result<Location, Error>  Create(int x, int y)
+        public static Result<Location, Error> Create(int x, int y)
         {
-            if (x < 1) return GeneralErrors.ValueIsInvalid(nameof(x));
-            if (x > 10) return GeneralErrors.ValueIsInvalid(nameof(x));
-            if (y < 1) return GeneralErrors.ValueIsInvalid(nameof(x));
-            if (y > 10) return GeneralErrors.ValueIsInvalid(nameof(x));
+            if (x < MinLocation.X || x > MaxLocation.X) return GeneralErrors.ValueIsInvalid(nameof(x));
+            if (y < MinLocation.Y || y > MaxLocation.Y) return GeneralErrors.ValueIsInvalid(nameof(y));
+
 
             return new Location(x, y);           
+        }
+
+        public static Result<Location, Error> CreateRandom()
+        {
+            var random = new Random();
+            var x = random.Next(MinLocation.X, MaxLocation.X);
+            var y = random.Next(MinLocation.X, MaxLocation.Y);
+            var location = new Location(x, y);
+            return location;
         }
 
 
