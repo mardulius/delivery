@@ -5,7 +5,7 @@ using Primitives;
 
 namespace DeliveryApp.Core.Application.UseCases.Commands.MoveToOrder
 {
-    internal class MoveToOrderHandler : IRequestHandler<MoveToOrderCommand, bool>
+    public class MoveToOrderHandler : IRequestHandler<MoveToOrderCommand, bool>
     {
         private readonly IOrderRepository _orderRepository;
         private readonly ICourierRepository _courierRepository;

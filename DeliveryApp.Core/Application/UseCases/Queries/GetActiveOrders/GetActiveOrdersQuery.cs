@@ -2,7 +2,10 @@
 
 namespace DeliveryApp.Core.Application.UseCases.Queries.GetActiveOrders
 {
-    public class GetActiveOrdersQuery : IRequest<Response>
+    public class GetActiveOrdersQuery : IRequest<GetActiveOrdersResponse>
     {
+        public GetActiveOrdersQuery()
+        {
+        }
     }
 }

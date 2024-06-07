@@ -6,7 +6,7 @@ using Npgsql;
 
 namespace DeliveryApp.Core.Application.UseCases.Queries.GetActiveOrders
 {
-    public class GetActiveOrdersHandler : IRequestHandler<GetActiveOrdersQuery, Response>
+    public class GetActiveOrdersHandler : IRequestHandler<GetActiveOrdersQuery, GetActiveOrdersResponse>
     {
         private readonly string _connectionString;
 
@@ -15,7 +15,7 @@ namespace DeliveryApp.Core.Application.UseCases.Queries.GetActiveOrders
             _connectionString = connectionString;
         }
 
-        public async Task<Response> Handle(GetActiveOrdersQuery request, CancellationToken cancellationToken)
+        public async Task<GetActiveOrdersResponse> Handle(GetActiveOrdersQuery request, CancellationToken cancellationToken)
         {
             using var postgres = new NpgsqlConnection(_connectionString);
             postgres.Open();
@@ -31,7 +31,7 @@ namespace DeliveryApp.Core.Application.UseCases.Queries.GetActiveOrders
                 orders.Add(MapToOrder(item));
             }
 
-            return new Response(orders);
+            return new GetActiveOrdersResponse(orders);
 
         }
 
