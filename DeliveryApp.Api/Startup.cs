@@ -45,6 +45,15 @@ namespace DeliveryApp.Api
             // Health Checks
             services.AddHealthChecks();
 
+            // Cors
+            services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(
+                    policy =>
+                    {
+                        policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                    });
+            });
             services.AddControllers(options =>
             {
                 options.InputFormatters.Insert(0, new InputFormatterStream());
@@ -78,15 +87,6 @@ namespace DeliveryApp.Api
             services.AddSwaggerGenNewtonsoftSupport();
 
 
-            // Cors
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(
-                    policy =>
-                    {
-                        policy.AllowAnyOrigin(); // Не делайте так в проде!
-                    });
-            });
 
             // Configuration
             services.Configure<Settings>(options => Configuration.Bind(options));
@@ -145,7 +145,7 @@ namespace DeliveryApp.Api
             {
                 app.UseHsts();
             }
-
+            app.UseCors();
 
             app.UseRouting();
             app.UseDefaultFiles();
@@ -166,7 +166,7 @@ namespace DeliveryApp.Api
             {
                 endpoints.MapControllers();
             });
-
+           
             app.UseHealthChecks("/health");
             app.UseRouting();
         }
