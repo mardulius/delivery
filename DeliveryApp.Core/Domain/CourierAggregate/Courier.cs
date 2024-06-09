@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DeliveryApp.Core.Domain.OrderAggregate;
 using DeliveryApp.Core.Domain.SharedKernel;
 using Primitives;
 
@@ -126,6 +127,10 @@ namespace DeliveryApp.Core.Domain.CourierAggregate
             return time;
         }
 
+        public bool CanTakeOrder(Order order)
+        {
+            return Status == CourierStatus.Ready && order.Weight <= Transport.Capacity;
+        }
 
 
     }

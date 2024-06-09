@@ -20,8 +20,8 @@ namespace DeliveryApp.Core.Application.UseCases.Queries.GetActiveOrders
             using var postgres = new NpgsqlConnection(_connectionString);
             postgres.Open();
 
-            var ordersFormDb = await postgres.QueryAsync<dynamic>("SELECT id, courier_id, location_x, location_y, weight, status FROM public.orders where status!=@status;",
-                new { status = OrderStatus.Completed.Id });
+            var ordersFormDb = await postgres.QueryAsync<dynamic>("SELECT id, courier_id, location_x, location_y, weight, status_id FROM public.orders where status_id!=@status_id;",
+                new { status_id = OrderStatus.Completed.Id });
             if (ordersFormDb.AsList().Count == 0)
                 return null;
 

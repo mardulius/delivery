@@ -26,7 +26,7 @@ namespace DeliveryApp.Core.Application.UseCases.Commands.AssingOrder
 
         public async Task<bool> Handle(AssignOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = _orderRepository.GetAllNotAssigned().FirstOrDefault();
+            var order = _orderRepository.GetAllCreated().FirstOrDefault();
             if (order == null) return false;
             var couriers = _courierRepository.GetAllReady().ToList();
             if (couriers.Count == 0) return false;

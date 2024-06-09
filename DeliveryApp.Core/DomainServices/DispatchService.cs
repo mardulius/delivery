@@ -11,23 +11,31 @@ namespace DeliveryApp.Core.DomainServices
     {
         public Result<Courier, Error> Dispatch(Order order, List<Courier> couriers)
         {
-            if (!order.Status.Equals(OrderStatus.Created)) return GeneralErrors.ValueIsInvalid("не правильный статус заказа");
-
-            var couriersReady = couriers.Where(c => c.Transport.CanAllocate(order.Weight).Value);
+            if (order == null) return GeneralErrors.ValueIsRequired(nameof(order));
+            if (couriers == null || couriers.Count == 0) return GeneralErrors.InvalidLength(nameof(couriers));
 
             var scores = new List<Score>();
-
-            foreach(var courier in couriersReady)
+            
+            
+            var minTimeToPoint = double.MaxValue;
+            Courier fastestCourier = null;
+            
+            foreach (var courier in couriers.Where(x => x.CanTakeOrder(order)))
             {
-                var time = courier.CalculateTimeToLocation(order.Location).Value;
-                scores.Add(new Score { Courier = courier, TimeToLocation = time });
+                var courierCalculateTimeToLocationResult = courier.CalculateTimeToLocation(order.Location);
+                if (courierCalculateTimeToLocationResult.IsFailure) return courierCalculateTimeToLocationResult.Error;
+                var timeToLocation = courierCalculateTimeToLocationResult.Value;
+
+                if (timeToLocation < minTimeToPoint)
+                {
+                    minTimeToPoint = timeToLocation;
+                    fastestCourier = courier;
+                }
             }
 
-            var minTimeCourier = scores.MinBy(x => x.TimeToLocation).Courier;
+            order.Assign(fastestCourier);
 
-            order.Assign(minTimeCourier);
-
-            return minTimeCourier;
+            return fastestCourier;
         }
 
         public class Score

@@ -8,7 +8,7 @@ namespace DeliveryApp.Core.Ports
         Order Add(Order order);
         void Update(Order order);
         Task<Order> GetAsync(Guid orderId); 
-        IEnumerable<Order> GetAllNotAssigned(); 
+        IEnumerable<Order> GetAllCreated(); 
         IEnumerable<Order> GetAllAssigned();
     }
 }

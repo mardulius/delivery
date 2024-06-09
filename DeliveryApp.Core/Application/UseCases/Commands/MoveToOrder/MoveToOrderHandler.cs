@@ -20,17 +20,27 @@ namespace DeliveryApp.Core.Application.UseCases.Commands.MoveToOrder
 
         public async Task<bool> Handle(MoveToOrderCommand request, CancellationToken cancellationToken)
         {
-            var orders = _orderRepository.GetAllAssigned();
-            if (!orders.Any())
+            var assignedOrders = _orderRepository.GetAllAssigned().ToList();
+            if (assignedOrders.Count == 0)
                 return false;
 
-            foreach (var order in orders)
+            foreach (var order in assignedOrders)
             {
-                var courier = await _courierRepository.GetAsync((Guid)order.CourierId);
-                courier.Move(order.Location);
+
+                if (order.CourierId == null)
+                    return false;
+
+                var courier = await _courierRepository.GetAsync((Guid) order.CourierId);
+                if (courier == null) return false;
+
+                var courierMoveResult = courier.Move(order.Location);
+                if (courierMoveResult.IsFailure) return false;
+
+
                 if (courier.Status == CourierStatus.Ready)
                 {
                     order.Complete();
+                    courier.CompleteOrder();
                 }
                 _courierRepository.Update(courier);
                 _orderRepository.Update(order);

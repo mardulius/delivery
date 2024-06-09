@@ -119,15 +119,17 @@ namespace DeliveryApp.Api
                 .AddTrigger(
                     trigger => trigger.ForJob(assignOrdersJob)
                     .WithSimpleSchedule(
-                        schedule => schedule.WithIntervalInSeconds(5)
+                        schedule => schedule.WithIntervalInSeconds(1)
                         .RepeatForever()))
                 .AddJob<MoveToOrdersJob>(moveToOrdersJob)
                 .AddTrigger(
                     trigger => trigger.ForJob(moveToOrdersJob)
                     .WithSimpleSchedule(
-                        schedule => schedule.WithIntervalInSeconds(3)
+                        schedule => schedule.WithIntervalInSeconds(2)
                         .RepeatForever()));
+                cfg.UseMicrosoftDependencyInjectionJobFactory();
             });
+
             services.AddQuartzHostedService();
 
 

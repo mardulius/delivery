@@ -14,7 +14,7 @@ namespace DeliveryApp.Infrastructure.Adapters.Postgres.EntityConfigurations.Orde
 
             builder
                 .Property(x => x.Id)
-                .HasColumnName("Id")
+                .HasColumnName("id")
                 .ValueGeneratedNever()
                 .IsRequired();
 

@@ -43,11 +43,5 @@ namespace DeliveryApp.Core.Domain.CourierAggregate
             yield return Car;
         }
 
-        public Result<bool, Error> CanAllocate(Weight weight)
-        {
-            return Capacity >= weight;
-        }
-
-
     }
 }

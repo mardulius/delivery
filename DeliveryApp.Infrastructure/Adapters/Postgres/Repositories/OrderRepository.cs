@@ -26,16 +26,18 @@ namespace DeliveryApp.Infrastructure.Adapters.Postgres.Repositories
         {
             var assigned = _dbContext
                 .Orders
-                .Where(x => x.Status != OrderStatus.Assigned);
+                .Include(x => x.Status)
+                .Where(x => x.Status == OrderStatus.Assigned);
 
             return assigned;
         }
 
-        public IEnumerable<Order> GetAllNotAssigned()
+        public IEnumerable<Order> GetAllCreated()
         {
             var assigned = _dbContext
                .Orders
-               .Where(x => x.Status != OrderStatus.Created);
+               .Include(x => x.Status)
+               .Where(x => x.Status == OrderStatus.Created);
 
             return assigned;
         }

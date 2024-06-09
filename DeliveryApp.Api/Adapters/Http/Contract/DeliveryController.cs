@@ -25,7 +25,8 @@ namespace DeliveryApp.Api.Adapters.Http.Contract
         {
             var basketId = Guid.NewGuid();
             var address = "Профсоюзная 12";
-            var weight = 12; 
+            var rnd = new Random();
+            var weight = rnd.Next(1, 8); 
 
             var createOrderCommand = new CreateOrderCommand(basketId, address, weight);
             var result = await _mediator.Send(createOrderCommand);

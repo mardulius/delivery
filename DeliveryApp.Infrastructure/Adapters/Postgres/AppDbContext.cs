@@ -6,10 +6,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DeliveryApp.Infrastructure.Adapters.Postgres
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+    public class AppDbContext : DbContext
     {
         public DbSet<Order> Orders { get; set; }
         public DbSet<Courier> Couriers { get; set; }
+
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        {
+            Database.EnsureCreated();
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -18,23 +23,6 @@ namespace DeliveryApp.Infrastructure.Adapters.Postgres
             modelBuilder.ApplyConfiguration(new CourierEntityConfiguration());
             modelBuilder.ApplyConfiguration(new CourierStatusEntityConfiguration());
             modelBuilder.ApplyConfiguration(new TransportEntityConfiguration());
-            
-            //modelBuilder.Entity<OrderStatus>(b =>
-            //{
-            //    var allStatuses = OrderStatus.List();
-            //    b.HasData(allStatuses.Select(c => new { c.Id, c.Name }));
-            //});
-            //modelBuilder.Entity<CourierStatus>(b =>
-            //{
-            //    var allStatuses = CourierStatus.List();
-            //    b.HasData(allStatuses.Select(c => new { c.Id, c.Name }));
-            //});
-            //modelBuilder.Entity<Transport>(b =>
-            //{
-            //    var allTransports = Transport.List();
-            //    b.HasData(allTransports.Select(c => new { c.Id, c.Name, c.Speed, c.Capacity.Value }));
-            //});
-
 
         }
 

@@ -1,6 +1,7 @@
 ﻿using DeliveryApp.Core.Domain.CourierAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using System.Reflection.Emit;
 
 namespace DeliveryApp.Infrastructure.Adapters.Postgres.EntityConfigurations.CourierAggregate
 {
@@ -27,15 +28,26 @@ namespace DeliveryApp.Infrastructure.Adapters.Postgres.EntityConfigurations.Cour
                 .Property(entity => entity.Speed)
                 .HasColumnName("speed")
                 .IsRequired();
+            
+            var allTransports = Transport.List();
 
             builder
               .OwnsOne(entity => entity.Capacity, c =>
               {
+                  c.HasData(allTransports.Select(c => new
+                  {
+                      TransportId = c.Id,
+                      c.Capacity.Value
+                  }));
                   c.Property(v => v.Value).HasColumnName("capacity").IsRequired();
                   c.WithOwner();
-              });
+              }).HasData(allTransports.Select(c => new
+              {
+                  c.Id,
+                  c.Name,
+                  c.Speed
+              }));
 
-            builder.HasData(Transport.List().Select(x => new { x.Id, x.Name, x.Speed, x.Capacity.Value }));
 
         }
     }
