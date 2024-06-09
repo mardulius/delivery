@@ -127,7 +127,6 @@ namespace DeliveryApp.Api
                     .WithSimpleSchedule(
                         schedule => schedule.WithIntervalInSeconds(2)
                         .RepeatForever()));
-                cfg.UseMicrosoftDependencyInjectionJobFactory();
             });
 
             services.AddQuartzHostedService();
