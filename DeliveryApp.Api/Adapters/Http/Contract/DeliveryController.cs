@@ -15,18 +15,21 @@ namespace DeliveryApp.Api.Adapters.Http.Contract
     public class DeliveryController : DefaultApiController
     {
         private readonly IMediator _mediator;
-
+        private readonly List<string> _addresses;
         public DeliveryController(IMediator mediator)
         {
             _mediator = mediator;
+            _addresses = ["Айтишная", "Эйчарная", "Тестировочная", "Мобильная", "Бажная", "Нагрузочная", "Аналитическая"];
         }
 
         public override async Task<IActionResult> CreateOrder()
         {
             var basketId = Guid.NewGuid();
-            var address = "Профсоюзная 12";
             var rnd = new Random();
-            var weight = rnd.Next(1, 8); 
+            var weight = rnd.Next(1, 8);
+
+            var addressIndex = rnd.Next(_addresses.Count);
+            var address = _addresses[addressIndex];
 
             var createOrderCommand = new CreateOrderCommand(basketId, address, weight);
             var result = await _mediator.Send(createOrderCommand);

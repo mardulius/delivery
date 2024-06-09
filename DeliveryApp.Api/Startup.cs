@@ -21,6 +21,7 @@ using DeliveryApp.Core.Application.UseCases.Queries.GetCouriers;
 using MediatR;
 using DeliveryApp.Api.Configuration;
 using DeliveryApp.Core.DomainServices;
+using DeliveryApp.Infrastructure.Adapters.Grpc.GeoService;
 
 namespace DeliveryApp.Api
 {
@@ -104,7 +105,7 @@ namespace DeliveryApp.Api
             services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICourierRepository, CourierRepository>();
-
+            services.AddTransient<IGeoClient>(x => new GeoClient(geoServiceGrpcHost));
 
             // Domain Services
             services.AddTransient<IDispatchService, DispatchService>();
@@ -129,9 +130,11 @@ namespace DeliveryApp.Api
                         .RepeatForever()));
             });
 
+            // QuartZ
             services.AddQuartzHostedService();
 
-
+            // gRPC
+            services.AddGrpcClient<GeoClient>(options => options.Address = new Uri(geoServiceGrpcHost));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
