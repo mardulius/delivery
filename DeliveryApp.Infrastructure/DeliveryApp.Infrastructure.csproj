@@ -8,6 +8,17 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="Adapters\Grpc\GeoService\grpc.proto" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Google.Protobuf" Version="3.27.1" />
+      <PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
+      <PackageReference Include="Grpc.Net.Client" Version="2.63.0" />
+      <PackageReference Include="Grpc.Tools" Version="2.64.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.5" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
         <PrivateAssets>all</PrivateAssets>
@@ -23,6 +34,10 @@
     <ItemGroup>
       <ProjectReference Include="..\DeliveryApp.Core\DeliveryApp.Core.csproj" />
       <ProjectReference Include="..\Utils\Primitives\Primitives.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Protobuf Include="Adapters\Grpc\GeoService\grpc.proto" GrpcServices="Client" />
     </ItemGroup>
 
 </Project>
