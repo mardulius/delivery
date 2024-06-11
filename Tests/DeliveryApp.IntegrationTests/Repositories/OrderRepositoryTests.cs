@@ -4,7 +4,9 @@ using DeliveryApp.Core.Domain.SharedKernel;
 using DeliveryApp.Infrastructure.Adapters.Postgres;
 using DeliveryApp.Infrastructure.Adapters.Postgres.Repositories;
 using FluentAssertions;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using NSubstitute;
 using Testcontainers.PostgreSql;
 using Xunit;
 
@@ -17,6 +19,9 @@ namespace DeliveryApp.IntegrationTests.Repositories
         private OrderRepository _orderRepository;
         private readonly Location _location;
         private readonly Weight _weight;
+        private readonly IMediator _mediator;
+
+
 
         private readonly PostgreSqlContainer _postgresContainer = new PostgreSqlBuilder()
           .WithImage("postgres:14.7")
@@ -28,6 +33,8 @@ namespace DeliveryApp.IntegrationTests.Repositories
 
         public OrderRepositoryTests()
         {
+            _mediator = Substitute.For<IMediator>();
+
             var weightCreateResult = Weight.Create(4);
             weightCreateResult.IsSuccess.Should().BeTrue();
             _weight = weightCreateResult.Value;
@@ -50,7 +57,7 @@ namespace DeliveryApp.IntegrationTests.Repositories
             _dbContext.Database.EnsureCreated();
 
             _orderRepository = new(_dbContext);
-            _unitOfWork = new(_dbContext);
+            _unitOfWork = new(_dbContext, _mediator);
 
 
 

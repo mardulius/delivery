@@ -36,7 +36,6 @@ namespace DeliveryApp.Core.Application.UseCases.Commands.CreateOrder
             var orderCreateResult = Order.Create(request.BasketId, location, weight);
             if (orderCreateResult.IsFailure) return false;
             order = orderCreateResult.Value;
-
             _orderRepository.Add(order);
 
             return await _unitOfWork.SaveEntitiesAsync(cancellationToken);

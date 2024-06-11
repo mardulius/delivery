@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using DeliveryApp.Core.Domain.CourierAggregate;
+using DeliveryApp.Core.Domain.OrderAggregate.DomainEvents;
 using DeliveryApp.Core.Domain.SharedKernel;
 using Primitives;
 
@@ -39,7 +40,8 @@ namespace DeliveryApp.Core.Domain.OrderAggregate
             Id = backetId;
             Location = location;
             Weight = weight;
-            Status = OrderStatus.Created;            
+            Status = OrderStatus.Created;
+            RaiseDomainEvent(new OrderCreatedDomainEvent(Id, Status.Name));
         }
 
         public static Result<Order, Error> Create(Guid backetId, Location location, Weight weight)
@@ -47,8 +49,7 @@ namespace DeliveryApp.Core.Domain.OrderAggregate
             if (backetId == Guid.Empty) return GeneralErrors.ValueIsRequired(nameof(backetId));
             if (location == null) return GeneralErrors.ValueIsRequired(nameof(location));
             if (weight == null) return GeneralErrors.ValueIsRequired(nameof(weight));
-
-
+            
             return new Order(backetId, location, weight);
         }
 
@@ -62,6 +63,9 @@ namespace DeliveryApp.Core.Domain.OrderAggregate
             CourierId = courier.Id;
             Status = OrderStatus.Assigned;
             courier.InWork();
+
+            RaiseDomainEvent(new OrderAssignedDomainEvent(Id, Status.Name));
+
             return new object();
         }
 
@@ -69,6 +73,9 @@ namespace DeliveryApp.Core.Domain.OrderAggregate
         {
             if (Status != OrderStatus.Assigned) return GeneralErrors.ValueIsInvalid(nameof(OrderStatus.Assigned));
             Status = OrderStatus.Completed;
+
+            RaiseDomainEvent(new OrderCompletedDomainEvent(Id, Status.Name));
+
             return new object();
         }
 

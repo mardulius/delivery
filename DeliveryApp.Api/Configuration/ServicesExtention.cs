@@ -1,10 +1,12 @@
-﻿using DeliveryApp.Core.Application.UseCases.Commands.AssingOrder;
+﻿using DeliveryApp.Core.Application.DomainEventHendlers;
+using DeliveryApp.Core.Application.UseCases.Commands.AssingOrder;
 using DeliveryApp.Core.Application.UseCases.Commands.CreateOrder;
 using DeliveryApp.Core.Application.UseCases.Commands.MoveToOrder;
 using DeliveryApp.Core.Application.UseCases.Commands.StartWork;
 using DeliveryApp.Core.Application.UseCases.Commands.StopWork;
 using DeliveryApp.Core.Application.UseCases.Queries.GetActiveOrders;
 using DeliveryApp.Core.Application.UseCases.Queries.GetCouriers;
+using DeliveryApp.Core.Domain.OrderAggregate.DomainEvents;
 using MediatR;
 
 namespace DeliveryApp.Api.Configuration
@@ -28,6 +30,12 @@ namespace DeliveryApp.Api.Configuration
                 new GetActiveOrdersHandler(connectionString));
             services.AddTransient<IRequestHandler<GetCouriersQuery, GetCouriersResponse>>(x =>
                 new GetCouriersHandler(connectionString));
+
+            // MediatR Domain Event Handlers
+            services.AddTransient<INotificationHandler<OrderCreatedDomainEvent>, OrderCreatedDomainEventHandler>();
+            services.AddTransient<INotificationHandler<OrderAssignedDomainEvent>, OrderAssignedDomainEventHandler>();
+            services.AddTransient<INotificationHandler<OrderCompletedDomainEvent>, OrderCompletedDomainEventHandler>();
+
 
             return services;
         }
