@@ -22,6 +22,8 @@ using MediatR;
 using DeliveryApp.Api.Configuration;
 using DeliveryApp.Core.DomainServices;
 using DeliveryApp.Infrastructure.Adapters.Grpc.GeoService;
+using DeliveryApp.Api.Adapters.Kafka.BasketConfirmed;
+using DeliveryApp.Infrastructure.Adapters.Kafka.OrderStatusChanged;
 
 namespace DeliveryApp.Api
 {
@@ -98,19 +100,23 @@ namespace DeliveryApp.Api
             // Configured MediatR
             services.AddConfiguredMediator(connectionString);
 
+            // SQL
             services.AddDbContext<AppDbContext>(options =>
              options.UseNpgsql(connectionString));
 
+            // Unit Of Work
+            services.AddTransient<IUnitOfWork, UnitOfWork>();
+
             // Ports & Adapters
             services.AddTransient<IOrderRepository, OrderRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<ICourierRepository, CourierRepository>();
             services.AddTransient<IGeoClient>(x => new GeoClient(geoServiceGrpcHost));
+            services.AddTransient<IBusProducer>(x => new Producer(messageBrokerHost));
 
             // Domain Services
             services.AddTransient<IDispatchService, DispatchService>();
 
-
+            // QuartZ
             services.AddQuartz(cfg =>
 
             {
@@ -128,13 +134,23 @@ namespace DeliveryApp.Api
                     .WithSimpleSchedule(
                         schedule => schedule.WithIntervalInSeconds(2)
                         .RepeatForever()));
-            });
-
-            // QuartZ
+            });   
             services.AddQuartzHostedService();
 
+            // Message Broker
+            services.Configure<HostOptions>(options =>
+            {
+                options.BackgroundServiceExceptionBehavior = BackgroundServiceExceptionBehavior.Ignore;
+                options.ShutdownTimeout = TimeSpan.FromSeconds(30);
+            });
             // gRPC
             services.AddGrpcClient<GeoClient>(options => options.Address = new Uri(geoServiceGrpcHost));
+
+            var sp = services.BuildServiceProvider();
+            var mediator = sp.GetService<IMediator>();
+            services.AddHostedService(x => new ConsumerService(mediator, messageBrokerHost));
+
+          
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

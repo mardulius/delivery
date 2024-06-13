@@ -9,9 +9,11 @@
 
     <ItemGroup>
       <None Remove="Adapters\Grpc\GeoService\grpc.proto" />
+      <None Remove="Adapters\Kafka\Contract.proto" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Confluent.Kafka" Version="2.4.0" />
       <PackageReference Include="Google.Protobuf" Version="3.27.1" />
       <PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
       <PackageReference Include="Grpc.Net.Client" Version="2.63.0" />
@@ -38,6 +40,7 @@
 
     <ItemGroup>
       <Protobuf Include="Adapters\Grpc\GeoService\grpc.proto" GrpcServices="Client" />
+      <Protobuf Include="Adapters\Kafka\OrderStatusChanged\Contract.proto" GrpcServices="Client" />
     </ItemGroup>
 
 </Project>

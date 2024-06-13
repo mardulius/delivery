@@ -37,7 +37,7 @@ namespace DeliveryApp.Core.Application.UseCases.Commands.MoveToOrder
                 if (courierMoveResult.IsFailure) return false;
 
 
-                if (courier.Status == CourierStatus.Ready)
+                if (order.Location == courier.Location)
                 {
                     order.Complete();
                     courier.CompleteOrder();
