@@ -8,6 +8,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <Compile Remove="Adapters\Postgres\NewFolder\**" />
+      <EmbeddedResource Remove="Adapters\Postgres\NewFolder\**" />
+      <None Remove="Adapters\Postgres\NewFolder\**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <None Remove="Adapters\Grpc\GeoService\grpc.proto" />
       <None Remove="Adapters\Kafka\Contract.proto" />
     </ItemGroup>
@@ -31,6 +37,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+      <PackageReference Include="Quartz" Version="3.9.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -41,6 +48,10 @@
     <ItemGroup>
       <Protobuf Include="Adapters\Grpc\GeoService\grpc.proto" GrpcServices="Client" />
       <Protobuf Include="Adapters\Kafka\OrderStatusChanged\Contract.proto" GrpcServices="Client" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Adapters\Postgres\EntityConfigurations\Outbox\" />
     </ItemGroup>
 
 </Project>
