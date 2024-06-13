@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DeliveryApp.Infrastructure.Adapters.Postgres.EntityConfigurations.OrderAggregate
+namespace DeliveryApp.Infrastructure.Adapters.Postgres.EntityConfigurations.Outbox
 {
     public class OutboxEntityTypeConfiguration : IEntityTypeConfiguration<OutboxMessage>
     {

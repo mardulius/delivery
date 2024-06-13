@@ -50,8 +50,4 @@
       <Protobuf Include="Adapters\Kafka\OrderStatusChanged\Contract.proto" GrpcServices="Client" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Adapters\Postgres\EntityConfigurations\Outbox\" />
-    </ItemGroup>
-
 </Project>
