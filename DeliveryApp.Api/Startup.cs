@@ -24,6 +24,7 @@ using DeliveryApp.Core.DomainServices;
 using DeliveryApp.Infrastructure.Adapters.Grpc.GeoService;
 using DeliveryApp.Api.Adapters.Kafka.BasketConfirmed;
 using DeliveryApp.Infrastructure.Adapters.Kafka.OrderStatusChanged;
+using DeliveryApp.Infrastructure.Adapters.BackgroundJobs;
 
 namespace DeliveryApp.Api
 {
@@ -122,6 +123,8 @@ namespace DeliveryApp.Api
             {
                 var assignOrdersJob = new JobKey(nameof(AssignOrdersJob));
                 var moveToOrdersJob = new JobKey(nameof(MoveToOrdersJob));
+                var outboxSendMessageJob = new JobKey(nameof(OutboxSendMessageJob));
+
                 cfg.AddJob<AssignOrdersJob>(assignOrdersJob)
                 .AddTrigger(
                     trigger => trigger.ForJob(assignOrdersJob)
@@ -133,6 +136,12 @@ namespace DeliveryApp.Api
                     trigger => trigger.ForJob(moveToOrdersJob)
                     .WithSimpleSchedule(
                         schedule => schedule.WithIntervalInSeconds(2)
+                        .RepeatForever()))
+                .AddJob<OutboxSendMessageJob>(outboxSendMessageJob)
+                .AddTrigger(
+                    trigger => trigger.ForJob(outboxSendMessageJob)
+                    .WithSimpleSchedule(
+                        schedule => schedule.WithIntervalInSeconds(5)
                         .RepeatForever()));
             });   
             services.AddQuartzHostedService();

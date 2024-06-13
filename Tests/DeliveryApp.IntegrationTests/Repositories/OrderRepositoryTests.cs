@@ -57,7 +57,7 @@ namespace DeliveryApp.IntegrationTests.Repositories
             _dbContext.Database.EnsureCreated();
 
             _orderRepository = new(_dbContext);
-            _unitOfWork = new(_dbContext, _mediator);
+            _unitOfWork = new(_dbContext);
 
 
 
